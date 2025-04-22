@@ -3,7 +3,6 @@
 This module provides simplified functions and formatted responses that AI assistants
 can use directly in their responses.
 """
-from typing import Any, Optional
 
 from python_ai_coding_standards.core.api import (
     StandardCategory,
@@ -15,159 +14,149 @@ from python_ai_coding_standards.core.api import (
 
 def get_standards_markdown() -> str:
     """Get a markdown representation of all standards for AI consumption.
-    
+
     Returns:
         A markdown-formatted string with the complete standards guide.
     """
     ai_standards = for_ai_assistant()
-    
+
     markdown = [
         "# Python Coding Standards for AI Assistants\n",
         "## General Guidelines\n",
     ]
-    
+
     for i, guideline in enumerate(ai_standards["general_guidelines"], 1):
         markdown.append(f"{i}. {guideline}\n")
-    
+
     markdown.append("\n## Project Structure\n")
     for i, guideline in enumerate(ai_standards["project_structure"], 1):
         markdown.append(f"{i}. {guideline}\n")
-    
+
     markdown.append("\n## Technical Requirements\n")
     markdown.append(f"- **Python version:** {ai_standards['python_version']}\n")
     markdown.append(f"- **Typing:** {ai_standards['typing']}\n")
-    
+
     markdown.append("\n## Preferred Tools\n")
     for tool, value in ai_standards["preferred_tools"].items():
         markdown.append(f"- **{tool.capitalize()}:** {value}\n")
-    
+
     markdown.append("\n## OOP Principles\n")
     for i, principle in enumerate(ai_standards["oop_principles"], 1):
         markdown.append(f"{i}. {principle}\n")
-    
+
     markdown.append("\n## Modern Features\n")
     for i, feature in enumerate(ai_standards["modern_features"], 1):
         markdown.append(f"{i}. {feature}\n")
-    
+
     return "".join(markdown)
 
 
-def get_example(category: StandardCategory, example_title: Optional[str] = None) -> str:
+def get_example(category: StandardCategory, example_title: str | None = None) -> str:
     """Get a code example for a specific standard category.
-    
+
     Args:
         category: The standard category to get an example for.
         example_title: Optional title of the specific example to retrieve.
             If not provided, returns the first example.
-            
+
     Returns:
         A string containing the Python code example.
-        
+
     Raises:
         ValueError: If the category doesn't exist or has no examples.
     """
     standard = get_standard(category)
-    
+
     if not standard["examples"]:
         raise ValueError(f"No examples available for category: {category}")
-    
+
     if example_title:
         for example in standard["examples"]:
             if example["title"] == example_title:
                 if "code" in example:
-                    return example["code"].strip()
+                    return str(example["code"]).strip()
                 elif "good_example" in example:
-                    return example["good_example"].strip()
+                    return str(example["good_example"]).strip()
                 else:
                     return str(example)
         raise ValueError(f"Example '{example_title}' not found in category: {category}")
     else:
         example = standard["examples"][0]
         if "code" in example:
-            return example["code"].strip()
+            return str(example["code"]).strip()
         elif "good_example" in example:
-            return example["good_example"].strip()
+            return str(example["good_example"]).strip()
         else:
             return str(example)
 
 
 def suggest_improvements(code_snippet: str) -> list[str]:
     """Analyze a code snippet and suggest improvements based on standards.
-    
+
     This function uses pattern matching to identify common issues and
     suggest improvements based on the coding standards.
-    
+
     Args:
         code_snippet: The Python code snippet to analyze.
-        
+
     Returns:
         A list of improvement suggestions.
     """
     suggestions = []
-    
+
     # Look for missing type hints
     if "def " in code_snippet and ") ->" not in code_snippet:
-        suggestions.append(
-            "Add type hints to function return values and parameters"
-        )
-    
+        suggestions.append("Add type hints to function return values and parameters")
+
     # Look for lambda functions with complex logic
     if "lambda" in code_snippet and "if" in code_snippet and "else" in code_snippet:
         suggestions.append(
             "Replace complex lambda functions with named functions for better readability"
         )
-    
+
     # Look for potential data class candidates
     lines_with_init_assignments = 0
     if "def __init__" in code_snippet:
         for line in code_snippet.split("\n"):
             if "self." in line and " = " in line:
                 lines_with_init_assignments += 1
-        
+
         if lines_with_init_assignments >= 3:
-            suggestions.append(
-                "Consider using @dataclass to simplify this class definition"
-            )
-    
+            suggestions.append("Consider using @dataclass to simplify this class definition")
+
     # Look for using mutable default arguments
     if "def " in code_snippet and "[]" in code_snippet and " = []" in code_snippet:
-        suggestions.append(
-            "Avoid using mutable default arguments (lists, dicts, etc.)"
-        )
-    
+        suggestions.append("Avoid using mutable default arguments (lists, dicts, etc.)")
+
     # Look for lack of context managers for file handling
     if "open(" in code_snippet and "with open" not in code_snippet:
-        suggestions.append(
-            "Use context managers (with statement) for file operations"
-        )
-    
+        suggestions.append("Use context managers (with statement) for file operations")
+
     # Look for generic exceptions
     if "except:" in code_snippet or "except Exception:" in code_snippet:
-        suggestions.append(
-            "Use specific exceptions instead of catching all exceptions"
-        )
-    
+        suggestions.append("Use specific exceptions instead of catching all exceptions")
+
     # Add recommendation from our standards
     standards_results = search_standards("best practice")
     if standards_results:
         for _, _, content in standards_results[:2]:  # Add up to 2 relevant standards
             if isinstance(content, str) and len(content) < 200:  # Only include short tips
                 suggestions.append(content)
-    
+
     return suggestions
 
 
 def get_project_structure() -> str:
     """Get the recommended project structure as a formatted string.
-    
+
     Returns:
         A string containing the project structure.
     """
     standard = get_standard("project_structure")
     for example in standard["examples"]:
         if "title" in example and example["title"] == "Standard project layout":
-            return example["code"].strip()
-    
+            return str(example["code"]).strip()
+
     # Fallback if not found
     return """
 project/
@@ -186,7 +175,7 @@ project/
 
 def get_pyproject_toml_example() -> str:
     """Get a sample pyproject.toml configuration using recommended tools.
-    
+
     Returns:
         A string containing the pyproject.toml content.
     """
@@ -271,18 +260,18 @@ python_functions = "test_*"
 
 def generate_standard_response(query: str) -> str:
     """Generate a standard response based on the user query.
-    
+
     This function is designed to be called by AI assistants to provide
     standardized responses to common queries about Python coding standards.
-    
+
     Args:
         query: The user query or keyword to respond to.
-        
+
     Returns:
         A markdown-formatted string response.
     """
     query_lower = query.lower()
-    
+
     # Project structure query
     if any(term in query_lower for term in ["structure", "layout", "organization"]):
         structure = get_project_structure()
@@ -299,10 +288,10 @@ def generate_standard_response(query: str) -> str:
 - Use pyproject.toml for configuration
 - Group related functionality in modules
 """
-    
+
     # Tools and configuration query
     elif any(term in query_lower for term in ["tools", "toolchain", "configuration", "setup"]):
-        return f"""
+        return """
 ## Recommended Toolchain
 
 - **Linter/Formatter:** Ruff
@@ -318,7 +307,7 @@ def generate_standard_response(query: str) -> str:
 - `hatch run format`: Format code
 - `hatch run all`: Run all checks and tests
 """
-    
+
     # OOP practices query
     elif any(term in query_lower for term in ["oop", "class", "object", "inheritance"]):
         try:
@@ -347,7 +336,7 @@ def generate_standard_response(query: str) -> str:
 4. **Dependency Inversion**: Depend on abstractions, not concretions
 5. **Composition over Inheritance**: Prefer composition to inheritance when possible
 """
-    
+
     # Modern Python features query
     elif any(term in query_lower for term in ["modern", "features", "dataclass", "typing"]):
         try:
@@ -376,7 +365,7 @@ def generate_standard_response(query: str) -> str:
 4. **Async/Await**: For asynchronous programming
 5. **Context Managers**: For resource management
 """
-    
+
     # Testing query
     elif any(term in query_lower for term in ["test", "testing", "pytest"]):
         return """
@@ -397,7 +386,7 @@ def test_user_creation():
     assert user.is_active is True  # Default value
 ```
 """
-    
+
     # Functional programming query
     elif any(term in query_lower for term in ["functional", "lambda", "comprehension"]):
         try:
@@ -426,7 +415,7 @@ def test_user_creation():
 4. **Higher-Order Functions**: Functions that take functions as parameters
 5. **Pure Functions**: Functions without side effects
 """
-    
+
     # Error handling query
     elif any(term in query_lower for term in ["error", "exception", "handling"]):
         return """
@@ -450,14 +439,14 @@ class UserNotFoundError(DomainError):
         super().__init__(f"User not found: {user_id}")
 ```
 """
-    
+
     # Default response - general guidelines
     else:
         return """
 ## Python Coding Standards - Quick Reference
 
 1. **Project Structure**: Use src-layout with pyproject.toml
-2. **Tools**: Ruff (linting/formatting), MyPy (type checking), Pytest (testing), Hatch (project management)
+2. **Tools**: Ruff (linting/formatting), MyPy (type checking), Pytest (testing), Hatch (pkg mgmt)
 3. **Type Hints**: Always use type annotations with PEP 695 generics
 4. **Python Version**: Use Python 3.11+ for new projects
 5. **OOP Principles**: Follow SOLID principles, prefer composition over inheritance

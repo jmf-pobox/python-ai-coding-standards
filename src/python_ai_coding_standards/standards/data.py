@@ -2,8 +2,6 @@
 
 This module contains structured data for Python coding standards.
 """
-from typing import Any
-
 
 PROJECT_STRUCTURE = {
     "title": "Project Structure",
@@ -28,7 +26,7 @@ project/
 ├── pyproject.toml
 ├── README.md
 └── .gitignore
-"""
+""",
         }
     ],
     "guidelines": [
@@ -38,7 +36,7 @@ project/
         "Use __init__.py files to define public API",
         "Separate tests from implementation code",
         "Use pyproject.toml for project configuration",
-    ]
+    ],
 }
 
 
@@ -54,7 +52,7 @@ DEVELOPMENT_TOOLS = {
                 "type_checking": "hatch run type",
                 "formatting": "hatch run format",
                 "development_server": "hatch run dev",
-            }
+            },
         }
     ],
     "guidelines": [
@@ -64,7 +62,7 @@ DEVELOPMENT_TOOLS = {
         "Use Hatch for project management",
         "Use Docker for containerization when needed",
         "Always use pyproject.toml for project configuration",
-    ]
+    ],
 }
 
 
@@ -91,7 +89,7 @@ class EmailService:
 
 class PasswordValidator:
     def validate_password(self) -> None: ...
-"""
+""",
         },
         {
             "title": "Open/Closed Principle (OCP)",
@@ -114,8 +112,8 @@ class CreditCardProcessor(PaymentProcessor):
 
 class PayPalProcessor(PaymentProcessor):
     def process_payment(self) -> None: ...
-"""
-        }
+""",
+        },
     ],
     "guidelines": [
         "Apply Single Responsibility Principle (SRP)",
@@ -123,7 +121,7 @@ class PayPalProcessor(PaymentProcessor):
         "Use Interface Segregation where appropriate",
         "Apply Dependency Inversion for loosely coupled code",
         "Prefer Composition over Inheritance",
-    ]
+    ],
 }
 
 
@@ -141,7 +139,7 @@ class PaymentMethodFactory:
             case "credit": return CreditCardPayment()
             case "paypal": return PayPalPayment()
             case _: raise ValueError(f"Unknown payment method: {method_type}")
-"""
+""",
         },
         {
             "title": "Strategy Pattern",
@@ -154,8 +152,8 @@ class QuickSort:
 
 class MergeSort:
     def sort(self, data: list[int]) -> list[int]: ...
-"""
-        }
+""",
+        },
     ],
     "guidelines": [
         "Use Factory Pattern for object creation",
@@ -163,7 +161,7 @@ class MergeSort:
         "Implement Observer Pattern for event handling",
         "Use Repository Pattern for data access",
         "Use patterns judiciously - don't over-engineer",
-    ]
+    ],
 }
 
 
@@ -185,7 +183,7 @@ user_preferences: dict[str, Any] = {
 
 # Lists for ordered collections
 items: list[str] = ["first", "second", "third"]
-"""
+""",
         },
         {
             "title": "Built-in types",
@@ -200,8 +198,8 @@ class Color(Enum):
 class Point(NamedTuple):
     x: float
     y: float
-"""
-        }
+""",
+        },
     ],
     "guidelines": [
         "Choose appropriate data structures for the use case",
@@ -210,7 +208,7 @@ class Point(NamedTuple):
         "Use lists for ordered collections",
         "Leverage Enum for structured constants",
         "Use NamedTuple and dataclasses for simple data objects",
-    ]
+    ],
 }
 
 
@@ -227,14 +225,14 @@ class User:
     email: str
     age: int
     is_active: bool = True
-"""
+""",
         },
         {
             "title": "Type Annotations and Generics",
             "code": """
 def process_items[T](items: list[T]) -> list[T]:
     return [item for item in items if item is not None]
-"""
+""",
         },
         {
             "title": "Context Managers",
@@ -246,8 +244,8 @@ def managed_resource():
         yield resource
     finally:
         release_resource(resource)
-"""
-        }
+""",
+        },
     ],
     "guidelines": [
         "Use dataclasses for data containers",
@@ -255,7 +253,7 @@ def managed_resource():
         "Leverage context managers for resource handling",
         "Use structural pattern matching for complex conditionals",
         "Take advantage of f-strings for string formatting",
-    ]
+    ],
 }
 
 
@@ -267,13 +265,13 @@ FUNCTIONAL_PROGRAMMING = {
             "title": "List Comprehensions",
             "code": """
 squares = [x**2 for x in range(10) if x % 2 == 0]
-"""
+""",
         },
         {
             "title": "Generator Expressions",
             "code": """
 large_squares = (x**2 for x in range(1000000) if x % 2 == 0)
-"""
+""",
         },
         {
             "title": "Lambda Functions",
@@ -284,8 +282,8 @@ square = lambda x: x**2
             "bad_example": """
 # Bad: Complex logic
 process_data = lambda x: (x**2 if x > 0 else 0) + (x if x < 10 else 10)
-"""
-        }
+""",
+        },
     ],
     "guidelines": [
         "Use list comprehensions over loops when appropriate",
@@ -293,7 +291,7 @@ process_data = lambda x: (x**2 if x > 0 else 0) + (x if x < 10 else 10)
         "Use lambda functions sparingly and only for simple operations",
         "Prefer comprehensions over map/filter/reduce",
         "Use higher-order functions to abstract patterns",
-    ]
+    ],
 }
 
 
@@ -312,11 +310,11 @@ class UserNotFoundError(DomainError):
     def __init__(self, user_id: str) -> None:
         self.user_id = user_id
         super().__init__(f"User not found: {user_id}")
-'''
+''',
         },
         {
             "title": "Context managers for resources",
-            "code": '''
+            "code": """
 with open("file.txt") as f:
     data = f.read()
     
@@ -330,8 +328,8 @@ def database_transaction():
     except Exception:
         transaction.rollback()
         raise
-'''
-        }
+""",
+        },
     ],
     "guidelines": [
         "Use specific exceptions rather than generic ones",
@@ -340,7 +338,7 @@ def database_transaction():
         "Catch only exceptions you can handle",
         "Include relevant error context in exception messages",
         "Document error conditions in function docstrings",
-    ]
+    ],
 }
 
 
@@ -356,7 +354,7 @@ def test_user_creation():
     assert user.name == "Test"
     assert user.email == "test@example.com"
     assert user.is_active is True  # Default value
-"""
+""",
         },
         {
             "title": "Mocking dependencies",
@@ -371,8 +369,8 @@ def test_welcome_email(mock_send_email):
         subject="Welcome to Our Service",
         body=ANY,
     )
-"""
-        }
+""",
+        },
     ],
     "guidelines": [
         "Write unit tests for all public methods",
@@ -381,7 +379,7 @@ def test_welcome_email(mock_send_email):
         "Include type checking in CI/CD pipeline",
         "Aim for high test coverage on business logic",
         "Use fixtures to set up test data",
-    ]
+    ],
 }
 
 
@@ -395,7 +393,7 @@ ENVIRONMENT = {
         "Use VS Code with Python extensions for a great IDE experience",
         "Manage virtual environments with Hatch or pixi",
         "Configure editor to use Ruff for linting and formatting",
-    ]
+    ],
 }
 
 
@@ -414,7 +412,7 @@ AI_GUIDELINES = {
         "Run ruff check and mypy --strict",
         "Document any non-obvious code decisions",
         "Consider performance implications of suggestions",
-    ]
+    ],
 }
 
 
@@ -427,5 +425,5 @@ PROJECT_TYPES = {
         "CLI: Use Click or Typer with Rich for terminal output",
         "Data Processing: Use pandas, numpy with proper error handling",
         "Libraries: Design clear public APIs with comprehensive docs",
-    ]
+    ],
 }

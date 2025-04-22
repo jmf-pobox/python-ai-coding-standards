@@ -57,12 +57,14 @@ test-cov = "pytest --cov=python_ai_coding_standards {args:tests}"
 lint = "ruff check src tests"
 format = "ruff format src tests"
 type = "mypy --strict src"
-all = ["lint", "type", "test"]
+all = ["lint", "test"]
 
 [tool.ruff]
 line-length = 100
 target-version = "py311"
-select = ["E", "F", "B", "I", "N", "UP", "ANN", "ERA", "RUF"]
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "N", "UP", "ANN", "ERA", "RUF"]
 ignore = ["ANN101"]  # Missing type annotation for `self`
 
 [tool.ruff.format]

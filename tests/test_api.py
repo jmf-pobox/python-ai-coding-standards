@@ -1,5 +1,6 @@
 """Tests for the API module."""
-from typing import Any, cast
+
+from typing import cast
 
 import pytest
 
@@ -26,7 +27,7 @@ def test_get_standard() -> None:
     # Get the first category from the list
     categories = get_all_categories()
     first_category = cast(StandardCategory, categories[0][0])
-    
+
     standard = get_standard(first_category)
     assert isinstance(standard, dict)
     assert "title" in standard
@@ -45,13 +46,13 @@ def test_search_standards() -> None:
     """Test that search_standards returns results for a common term."""
     results = search_standards("python")
     assert len(results) > 0
-    
+
     # Check the structure of the first result
     first_result = results[0]
     assert len(first_result) == 3
     assert isinstance(first_result[0], str)  # category
     assert isinstance(first_result[1], str)  # field
-    assert isinstance(first_result[2], (str, dict, list))  # content
+    assert isinstance(first_result[2], str | dict | list)  # content
 
 
 def test_get_project_toolchain() -> None:

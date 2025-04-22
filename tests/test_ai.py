@@ -1,6 +1,6 @@
 """Tests for the AI module."""
-import pytest
 
+import pytest
 from python_ai_coding_standards.ai import (
     get_standards_markdown,
     get_example,
@@ -78,18 +78,18 @@ def test_generate_standard_response() -> None:
     structure_response = generate_standard_response("project structure")
     assert "Project Structure" in structure_response
     assert "src-layout" in structure_response.lower()
-    
+
     # Test toolchain query
     tools_response = generate_standard_response("recommended tools")
     assert "Toolchain" in tools_response
     assert "Ruff" in tools_response
     assert "MyPy" in tools_response
-    
+
     # Test OOP query
     oop_response = generate_standard_response("OOP principles")
     assert "OOP Best Practices" in oop_response
     assert "Single Responsibility Principle" in oop_response
-    
+
     # Test default response
     default_response = generate_standard_response("give me some advice")
     assert "Python Coding Standards - Quick Reference" in default_response

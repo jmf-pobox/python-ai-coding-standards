@@ -2,7 +2,8 @@
 
 This module provides functions for AI assistants to query coding standards.
 """
-from typing import Any, Literal, TypedDict, get_type_hints
+
+from typing import Any, Literal, TypedDict
 
 from python_ai_coding_standards.standards.data import (
     PROJECT_STRUCTURE,
@@ -38,6 +39,7 @@ StandardCategory = Literal[
 
 class StandardInfo(TypedDict):
     """Information about a standard category."""
+
     title: str
     description: str
     examples: list[dict[str, Any]]
@@ -62,7 +64,7 @@ _STANDARDS_MAP: dict[StandardCategory, Any] = {
 
 def get_all_categories() -> list[tuple[StandardCategory, str]]:
     """Get all available standard categories with their titles.
-    
+
     Returns:
         A list of tuples containing (category_id, category_title).
     """
@@ -71,60 +73,60 @@ def get_all_categories() -> list[tuple[StandardCategory, str]]:
 
 def get_standard(category: StandardCategory) -> StandardInfo:
     """Get the standards for a specific category.
-    
+
     Args:
         category: The category of standards to retrieve.
-        
+
     Returns:
         The standards information for the requested category.
-        
+
     Raises:
         ValueError: If the category doesn't exist.
     """
     if category not in _STANDARDS_MAP:
         raise ValueError(f"Unknown standard category: {category}")
-    
+
     return _STANDARDS_MAP[category]
 
 
 def search_standards(query: str) -> list[tuple[StandardCategory, str, Any]]:
     """Search through all standards for matching content.
-    
+
     Args:
         query: The search string to look for in standards.
-        
+
     Returns:
         A list of tuples with (category, matched_field, content) where the query was found.
     """
     results = []
     query = query.lower()
-    
+
     for category, data in _STANDARDS_MAP.items():
         # Search in title
         if query in data["title"].lower():
             results.append((category, "title", data["title"]))
-        
+
         # Search in description
         if query in data["description"].lower():
             results.append((category, "description", data["description"]))
-        
+
         # Search in guidelines
         for guideline in data["guidelines"]:
             if query in guideline.lower():
                 results.append((category, "guideline", guideline))
-        
+
         # Search in examples
         for example in data["examples"]:
             for key, value in example.items():
                 if isinstance(value, str) and query in value.lower():
                     results.append((category, f"example.{key}", value))
-    
+
     return results
 
 
 def get_project_toolchain() -> dict[str, Any]:
     """Get the recommended toolchain for Python projects.
-    
+
     Returns:
         A dictionary with tool information.
     """
@@ -146,7 +148,7 @@ def get_project_toolchain() -> dict[str, Any]:
 
 def for_ai_assistant() -> dict[str, Any]:
     """Get a summary of standards specifically for AI assistants.
-    
+
     Returns:
         A dictionary with AI-specific guidance.
     """
@@ -160,6 +162,6 @@ def for_ai_assistant() -> dict[str, Any]:
             "type_checker": "mypy --strict",
             "package_manager": "hatch",
         },
-        "oop_principles": [p["title"] for p in OOP_PRINCIPLES["examples"]],
-        "modern_features": [f["title"] for f in MODERN_FEATURES["examples"]],
+        "oop_principles": [str(p["title"]) for p in OOP_PRINCIPLES["examples"]],
+        "modern_features": [str(f["title"]) for f in MODERN_FEATURES["examples"]],
     }
