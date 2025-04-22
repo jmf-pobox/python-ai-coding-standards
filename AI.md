@@ -1,5 +1,10 @@
 # Python Project Preferences for AI Assistance
 
+> **Note**: These coding standards are now available as a Python package. 
+> Install via `pip install python-ai-coding-standards` to access programmatically.
+> 
+> See [README.md](README.md) for details on using the package.
+
 ## Project Structure Guidelines
 Recommended src-layout structure for Python projects:
 ```
